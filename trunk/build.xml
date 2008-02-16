@@ -1,0 +1,100 @@
+<project name="fixparser" default="all" basedir=".">
+
+	<property file="build.properties" />
+	<property name="app.name" value="fixparser.java.net" />
+	<property name="app.version" value="0.9.1" />
+
+	<path id="base.classpath">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement location="target/classes" />
+	</path>
+
+	<path id="test.classpath">
+		<path refid="base.classpath" />
+		<pathelement location="target/test-classes" />
+		<fileset dir="lib.build">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="all" depends="clean, compile, test" description="Clean, Build and Run Unit Tests" />
+
+	<target name="clean" description="Delete old build and dist directories">
+		<delete dir="target" />
+		<delete dir="src/javacc/net/java/fixparser" includes="*.java" />
+	</target>
+
+	<target name="compile" depends="generate" description="Compile Java sources">
+		<mkdir dir="target/classes" />
+		<mkdir dir="target/test-classes" />
+
+		<javac destdir="target/classes"
+		       debug="${compile.debug}"
+		       deprecation="${compile.deprecation}"
+		       optimize="${compile.optimize}"
+		       source="${compile.source}"
+		       classpathref="base.classpath">
+			<src path="src/javacc" />
+			<src path="src/java" />
+		</javac>
+
+		<javac destdir="target/test-classes"
+		       debug="${compile.debug}"
+		       deprecation="${compile.deprecation}"
+		       optimize="${compile.optimize}"
+		       source="${compile.source}"
+		       classpathref="test.classpath">
+			<src path="src/test" />
+		</javac>
+
+	</target>
+
+	<target name="generate" depends="prepare" description="Generate Java sources">
+		<javacc target="src/javacc/net/java/fixparser/SimpleFixParser.jj"
+		        outputdirectory="src/javacc/net/java/fixparser"
+		        javacchome="./lib.build/javacc-4.0" />
+	</target>
+
+	<target name="test" depends="compile" description="Run Unit Tests">
+		<delete dir="target/test-reports" failonerror="false" />
+		<mkdir dir="target/test-reports" />
+
+		<junit printsummary="yes" haltonfailure="yes" showoutput="false">
+			<classpath>
+				<path refid="test.classpath" />
+			</classpath>
+
+
+			<formatter type="plain" />
+
+			<jvmarg value="-ea" />
+
+			<batchtest fork="yes" todir="target/test-reports">
+				<fileset dir="target/test-classes">
+					<include name="**/*Test.class" />
+					<exclude name="**/*AbstractTest.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="dist" depends="all, javadoc" description="Create binary distribution">
+		<jar jarfile="target/${app.name}-${app.version}.jar" basedir="target/classes" />
+	</target>
+
+	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
+
+		<mkdir dir="target/docs/api" />
+		<javadoc sourcepath="src/java" destdir="target/docs/api" packagenames="*">
+			<classpath refid="base.classpath" />
+		</javadoc>
+
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="target" />
+	</target>
+
+</project>
