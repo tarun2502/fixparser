@@ -1,0 +1,14 @@
+Implement Repeating Groups parsing. 
+
+One possible implemantion (requires more looking into, don't know if it OK... said it is hacky).
+Try to use manual Lexical State switch:
+http://www.engr.mun.ca/~theo/JavaCC-FAQ/javacc-faq-moz.htm#tth_sEc3.11
+
+Create a map of all NoXXX tags and switch to RepeatingGroup lexical state when one of those tags is met. Switch back to Default state after processing all repeating group entries.
+
+NoXXX sample:
+BeginString(8)=FIX.4.4|BodyLength(9)=60|MsgType(35)=J|MsgSeqNum(34)=1|SenderCompID(49)=CLIENT|TargetCompID(56)=SERVER|SendingTime(52)=20080204-19:19:11|AllocID(70)=1|AllocTransType(71)=0|AllocType(626)=2|AllocNoOrdersType(857)=1|NoOrders(73)=1|ClOrdID(11)=20041210-00001|OrderQty(38)=121|OrderID(37)=01|Side(54)=2|NoExecs(124)=2|LastQty(32)=321|ExecID(17)=171|LastPx(31)=311|LastCapacity(29)=1|LastQty(32)=322|ExecID(17)=172|LastPx(31)=312|LastCapacity(29)=2|CheckSum(10)=123|
+8=FIX.4.4|9=60|35=J|34=1|49=CLIENT|56=SERVER|52=20080204-19:19:11|70=1|71=0|626=2|857=1|73=1|11=20041210-00001|38=121|37=01|54=2|124=2|32=321|17=171|31=311|29=1|32=322|17=172|31=312|29=2|10=123|
+
+
+test repeating groups with NoXXX=0

@@ -1,0 +1,77 @@
+/* * Simple FIX Message Parser. Does not validate FIX messages,  * allows empty tags (tags with no values, e.g. |84=|. The main idea of this parser * is to parse out incoming fix messages and keep them in the form suitable for * the later saving into database. * * author: Leonid Shlyapnikov * email: lshlyapnikov@gmail.com * * Feel free to modify and redistribute * if this header (this line and all text above) is kept unchanged. * */
+options {
+	STATIC = false;
+	DEBUG_PARSER = false;
+	DEBUG_LOOKAHEAD = false;
+	DEBUG_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(SimpleFixParser)
+
+package net.java.fixparser;import net.java.fixparser.SimpleFixMessage;import net.java.fixparser.TagValueImpl;
+
+public class SimpleFixParser {
+
+  public static void main(String args[]) throws ParseException {
+	SimpleFixParser parser = new SimpleFixParser(System.in);    while (true) {    	SimpleFixMessage msg = parser.readFixMessage();    	if (null == msg) {    		break;    	}    }
+  }
+
+}
+
+PARSER_END(SimpleFixParser)
+
+<DEFAULT>  TOKEN : {
+	<CHECKSUM_TAG: "10" >|	<HEADER_TAG: "8" >	
+|	<TAG: ( ["0"-"9"] )+ >
+|	<EQ: "=" >: IN_VALUE|	<NEW_LINE: ( ["\r", "\n"] )+ >
+}
+
+<IN_VALUE> TOKEN : {
+	<VALUE: ( ~["=", "\u0001", "|" ] )+ >
+|	<SOH: "\u0001" | "|" > : DEFAULT 
+}
+SimpleFixMessage readFixMessage() : {	SimpleFixMessage result = null;}{	(		<EOF>		|		result = FixMessage()	)		{ return result; }	}
+
+private SimpleFixMessage FixMessage() : {
+	SimpleFixMessage result = new SimpleFixMessage();
+	String fixSpec;
+	TagValueImpl<String, String> tagValue;
+	String checksum;
+}
+{
+	fixSpec = Header() { result.put("8", fixSpec); }
+	
+	(
+		tagValue = TagValuePair() { result.put(tagValue); }
+	)*
+	
+	checksum = Checksum() { result.put("10", checksum); }	
+	[<NEW_LINE>]	
+	{ return result; }
+}
+
+private TagValueImpl<String, String> TagValuePair() : {
+	String tag = null;	String value = "";
+} 
+{
+	<TAG> { tag = token.image; }
+	"=" 	[ <VALUE> { value = token.image; } ]	<SOH>
+	{ return new TagValueImpl<String, String>(tag, value); }
+}
+
+private String Header() : {
+	String fixSpec = "";
+}
+{
+	<HEADER_TAG>	"="	[ <VALUE> { fixSpec = token.image; } ]	<SOH>
+	{ return  fixSpec; }
+}
+
+private String Checksum() : {
+	String checksum = "";
+}
+{
+	<CHECKSUM_TAG>	"=" 	[ <VALUE> { checksum = token.image; } ]	<SOH>
+	{ return checksum; }
+}
+

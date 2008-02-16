@@ -1,0 +1,90 @@
+/* * FIX Message Parser. * * author: Leonid Shlyapnikov * email: lshlyapnikov@gmail.com * * Feel free to modify and redistribute * if this header (this line and all text above) is kept unchanged. * */
+options {
+	STATIC = false;
+	DEBUG_PARSER = false;
+	DEBUG_LOOKAHEAD = false;
+	DEBUG_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(FixParser)
+
+package net.java.fixparser;
+
+public class FixParser {
+
+  public static void main(String args[]) throws ParseException {
+    FixParser parser = new FixParser(System.in);
+    parser.FixMessage();
+  }
+
+}
+
+PARSER_END(FixParser)
+
+<DEFAULT>  TOKEN : {
+	<CHECKSUM_TAG: "10" >
+|	<TAG: ( ["0"-"9"] )+ >
+|	<EQ: "=" >: IN_VALUE
+}
+
+<IN_VALUE> TOKEN : {
+	<VALUE: ( ~["=", "\u0001", "|" ] )+ >
+|	<SOH: "\u0001" | "|" > : DEFAULT 
+}
+
+
+java.util.Map<String, String> FixMessage() :
+{
+	java.util.LinkedHashMap<String, String> result = 
+		new java.util.LinkedHashMap<String, String>();
+	String fixSpec;
+	String tagValue[];
+	String checksum;
+}
+{
+	fixSpec = Header() { result.put("8", fixSpec); }
+	<SOH>
+	
+	(
+		tagValue = TagValuePair() { result.put(tagValue[0], tagValue[1]); }
+		<SOH>
+	)*
+	
+	checksum = Checksum() { result.put("10", checksum); }
+	<SOH>
+	
+	{ return result; }
+}
+
+String[] TagValuePair() :
+{
+	String result[] = new String[2];
+}
+{
+	<TAG> { result[0] = token.image; }
+	 "=" 
+	 result[1] = Value()
+	{ return result; }
+}
+
+String Header() :
+{
+	String fixSpec;
+}
+{
+	<TAG> "=" fixSpec = Value()
+	{ return  fixSpec; }
+}
+
+String Checksum() :
+{
+	String checksum;
+}
+{
+	<CHECKSUM_TAG> "=" checksum = Value()
+	{ return checksum; }
+}
+
+String Value() : {} {
+	<VALUE> { return token.image; }
+}
