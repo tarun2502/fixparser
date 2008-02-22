@@ -27,7 +27,7 @@ PARSER_END(SimpleFixParser)
 }
 
 <IN_VALUE> TOKEN : {
-	<VALUE: ( ~["=", "\u0001", "|" ] )+ >
+	<VALUE: ( ~["\u0001", "|" ] )+ >
 |	<SOH: "\u0001" | "|" > : DEFAULT 
 }
 SimpleFixMessage readFixMessage() : {	SimpleFixMessage result = null;}{	(		<EOF>		|		result = FixMessage()	)		{ return result; }	}
