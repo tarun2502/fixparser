@@ -1,6 +1,6 @@
 = Getting Started with FIX Parser =
 
-{{{{
+{{{
         FileInputStream fis = new FileInputStream("fix_message.log");
         SimpleFixParser parser = new SimpleFixParser(fis);
 
@@ -16,4 +16,4 @@
 
         IoUtils.close(fis);
 
-}}}}
+}}}
