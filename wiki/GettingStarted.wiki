@@ -1,13 +1,19 @@
-#summary One-sentence summary of this page.
+= Getting Started with FIX Parser =
 
-= Introduction =
+{{{{
+        FileInputStream fis = new FileInputStream("fix_message.log");
+        SimpleFixParser parser = new SimpleFixParser(fis);
 
-Add your content here.
+        for (int indx = 0; true; indx++) {
+            SimpleFixMessage msg = parser.readFixMessage();
+            if (null == msg) {
+                break;
+            }
 
+            // process FIX message
 
-= Details =
+        }
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+        IoUtils.close(fis);
+
+}}}}
