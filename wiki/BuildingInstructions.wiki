@@ -1,4 +1,6 @@
+#summary Building Instructions
 #labels How-To
+
 = Building Instructions =
 
 1. Check Out the Source Tree
