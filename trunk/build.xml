@@ -1,8 +1,8 @@
 <project name="fixparser" default="all" basedir=".">
 
 	<property file="build.properties" />
-	<property name="app.name" value="fixparser.java.net" />
-	<property name="app.version" value="0.9.1" />
+	<property name="app.name" value="fixparser" />
+	<property name="app.version" value="0.7.0" />
 
 	<path id="base.classpath">
 		<fileset dir="lib">
@@ -19,7 +19,7 @@
 		</fileset>
 	</path>
 
-	<target name="all" depends="clean, compile, test" description="Clean, Build and Run Unit Tests" />
+	<target name="all" depends="compile, test" description="Clean, Build and Run Unit Tests" />
 
 	<target name="clean" description="Delete old build and dist directories">
 		<delete dir="target" />
@@ -80,14 +80,59 @@
 		</junit>
 	</target>
 
-	<target name="dist" depends="all, javadoc" description="Create binary distribution">
-		<jar jarfile="target/${app.name}-${app.version}.jar" basedir="target/classes" />
+	<target name="dist" depends="clean, all, javadoc" description="Create binary distribution">
+		<property name="dist-jar" value="${app.name}-${app.version}.jar" />
+		<jar jarfile="target/${dist-jar}" basedir="target/classes" />
+		
+		<property name="dist-dir" value="target/${app.name}-${app.version}" />
+		<mkdir dir="${dist-dir}" />
+		
+		<mkdir dir="${dist-dir}/dist" />
+		<copy todir="${dist-dir}/dist" file="target/${dist-jar}" />
+
+		<mkdir dir="${dist-dir}/src/java" />
+		<mkdir dir="${dist-dir}/src/javacc" />
+		<mkdir dir="${dist-dir}/src/test" />
+
+		<copy todir="${dist-dir}/src/java">
+			<fileset dir="src/java">
+				<include name="**/*.*"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${dist-dir}/src/javacc">
+			<fileset dir="src/javacc">
+				<include name="**/*.*"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+			
+		<copy todir="${dist-dir}/src/test">
+			<fileset dir="src/java">
+				<include name="**/*.*"/>
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+		
+		<mkdir dir="${dist-dir}/doc"/>
+		<copy todir="${dist-dir}/doc">
+			<fileset dir="target/doc" includes="**/*" />
+		</copy>
+		
+		<mkdir dir="${dist-dir}/samples" />
+		
+		<zip destfile="${dist-dir}.zip">
+			<fileset dir="target">
+				<include name="${app.name}-${app.version}/**/*"/>
+			</fileset>
+		</zip>
 	</target>
 
 	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
 
-		<mkdir dir="target/docs/api" />
-		<javadoc sourcepath="src/java" destdir="target/docs/api" packagenames="*">
+		<mkdir dir="target/doc/api" />
+		<javadoc sourcepath="src/java" destdir="target/doc/api" packagenames="*">
 			<classpath refid="base.classpath" />
 		</javadoc>
 
