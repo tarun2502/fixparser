@@ -9,7 +9,7 @@
 
 2. CD Into fixparser Directory
 {{{
-cd fixparser
+> cd fixparser
 }}}
 
 3. Build with Ant
