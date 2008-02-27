@@ -1,18 +1,18 @@
 #labels How-To
 = Building Instructions =
 
-== Check Out the Source Tree ==
+1. Check Out the Source Tree
 {{{
 > svn checkout http://fixparser.googlecode.com/svn/trunk/ fixparser
 }}}
 
 
-== CD Into fixparser Directory ==
+2. CD Into fixparser Directory
 {{{
 cd fixparser
 }}}
 
-== Build with Ant ==
+3. Build with Ant
 {{{
 > ant dist
 }}}
