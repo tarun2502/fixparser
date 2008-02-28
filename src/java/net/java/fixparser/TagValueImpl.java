@@ -1,5 +1,10 @@
 package net.java.fixparser;
 
+/**
+ * FIX Field TagValue pair implementation.
+ * 
+ * @author Leonid Shlyapnikov
+ */
 public class TagValueImpl<T, V> implements TagValue<T, V> {
 
     private final T tag;
