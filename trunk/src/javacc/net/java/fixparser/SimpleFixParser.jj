@@ -1,4 +1,4 @@
-/* * Simple FIX Message Parser. Does not validate FIX messages,  * allows empty tags (tags with no values, e.g. |84=|. The main idea of this parser * is to parse out incoming fix messages and keep them in the form suitable for * the later saving into database. * * author: Leonid Shlyapnikov * email: lshlyapnikov@gmail.com * * Feel free to modify and redistribute * if this header (this line and all text above) is kept unchanged. * */
+/* * Simple FIX Message Parser.  * `net.java.fixparser.SimpleFixParser` is non-validating FIX parser.  * It allows empty tags and does not use any data dictionary to parse incoming messages. * It is implemented with the idea to parse FIX messages with maximum performance * and keep them in a form suitable for saving into database. * * author: Leonid Shlyapnikov * email: lshlyapnikov@gmail.com */
 options {
 	STATIC = false;
 	DEBUG_PARSER = false;
@@ -9,7 +9,7 @@ options {
 PARSER_BEGIN(SimpleFixParser)
 
 package net.java.fixparser;import net.java.fixparser.SimpleFixMessage;import net.java.fixparser.TagValueImpl;
-
+/** * Simple FIX Message Parser.  * `net.java.fixparser.SimpleFixParser` is non-validating FIX parser.  * It allows empty tags and does not use any data dictionary to parse incoming messages. * It is implemented with the idea to parse FIX messages with maximum performance * and keep them in a form suitable for saving into database. * * @author Leonid Shlyapnikov */
 public class SimpleFixParser {
 
   public static void main(String args[]) throws ParseException {
@@ -30,7 +30,7 @@ PARSER_END(SimpleFixParser)
 	<VALUE: ( ~["\u0001", "|" ] )+ >
 |	<SOH: "\u0001" | "|" > : DEFAULT 
 }
-SimpleFixMessage readFixMessage() : {	SimpleFixMessage result = null;}{	(		<EOF>		|		result = FixMessage()	)		{ return result; }	}
+/** * Reads the next FIX message from the input stream. * If no message is available because the end of the stream * has been reached, <code>null</code> is returned. This method * blocks until input data is available, the end of the stream is detected, * or an exception is thrown. * * @return		the next FIX message, or <code>null</code> if the end of the stream is reached. * @exception	ParseException		if parse errors are encountered. */SimpleFixMessage readFixMessage() : {	SimpleFixMessage result = null;}{	(		<EOF>		|		result = FixMessage()	)		{ return result; }	}
 
 private SimpleFixMessage FixMessage() : {
 	SimpleFixMessage result = new SimpleFixMessage();

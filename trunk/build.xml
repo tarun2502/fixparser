@@ -83,10 +83,10 @@
 	<target name="dist" depends="clean, all, javadoc" description="Create binary distribution">
 		<property name="dist-jar" value="${app.name}-${app.version}.jar" />
 		<jar jarfile="target/${dist-jar}" basedir="target/classes" />
-		
+
 		<property name="dist-dir" value="target/${app.name}-${app.version}" />
 		<mkdir dir="${dist-dir}" />
-		
+
 		<mkdir dir="${dist-dir}/dist" />
 		<copy todir="${dist-dir}/dist" file="target/${dist-jar}" />
 
@@ -100,28 +100,28 @@
 				<exclude name="**/.svn"/>
 			</fileset>
 		</copy>
-		
+
 		<copy todir="${dist-dir}/src/javacc">
 			<fileset dir="src/javacc">
 				<include name="**/*.*"/>
 				<exclude name="**/.svn"/>
 			</fileset>
 		</copy>
-			
+
 		<copy todir="${dist-dir}/src/test">
 			<fileset dir="src/java">
 				<include name="**/*.*"/>
 				<exclude name="**/.svn"/>
 			</fileset>
 		</copy>
-		
+
 		<mkdir dir="${dist-dir}/doc"/>
 		<copy todir="${dist-dir}/doc">
 			<fileset dir="target/doc" includes="**/*" />
 		</copy>
-		
+
 		<mkdir dir="${dist-dir}/samples" />
-		
+
 		<zip destfile="${dist-dir}.zip">
 			<fileset dir="target">
 				<include name="${app.name}-${app.version}/**/*"/>
@@ -132,8 +132,14 @@
 	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
 
 		<mkdir dir="target/doc/api" />
-		<javadoc sourcepath="src/java" destdir="target/doc/api" packagenames="*">
+		<javadoc destdir="target/doc/api" packagenames="*">
 			<classpath refid="base.classpath" />
+			<fileset dir="src/java">
+				<include name="**/*.java" />
+			</fileset>
+			<fileset dir="src/javacc">
+				<include name="**/*.java" />
+			</fileset>
 		</javadoc>
 
 	</target>
