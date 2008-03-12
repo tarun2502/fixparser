@@ -3,6 +3,8 @@
 
 = Building Instructions =
 
+Requirements JDK 1.5.x and Apache Ant 1.7.x.
+
 1. Check Out the Source Tree
 {{{
 > svn checkout http://fixparser.googlecode.com/svn/trunk/ fixparser
