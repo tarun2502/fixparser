@@ -12,8 +12,6 @@ import org.junit.Test;
 
 public class FixParserTest {
 
-    private static final String EOL = System.getProperty("line.separator", "\n");
-
     private static final String FIX_MSG =
             "8=FIX.4.2|9=99|35=D|49=SenderCompId|56=TargetCompId|115=BROK|128=INST|11=ClOrdId1_1010|15=USD|21=3|38=999|40=1|54=1|55=IBM|60=20050611-00:43:34|10=999|";
 
@@ -108,8 +106,8 @@ public class FixParserTest {
             
         // load the expected multiline value from file
         final String expectedValue = loadTagValueFromFile(new File(FIX_MESSAGE_WITH_MULTILINE_VALUE), tag);
-        Assert.assertTrue(expectedValue.startsWith("-----BEGIN PGP MESSAGE-----" + EOL));
-        Assert.assertTrue(expectedValue.endsWith("-----END PGP MESSAGE-----" + EOL));
+        Assert.assertTrue(expectedValue.startsWith("-----BEGIN PGP MESSAGE-----\n"));
+        Assert.assertTrue(expectedValue.endsWith("-----END PGP MESSAGE-----\n"));
 
         // parse the message
         
