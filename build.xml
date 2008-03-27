@@ -2,7 +2,7 @@
 
 	<property file="build.properties" />
 	<property name="app.name" value="fixparser" />
-	<property name="app.version" value="0.7.0" />
+	<property name="app.version" value="0.7.1" />
 
 	<path id="base.classpath">
 		<fileset dir="lib">
