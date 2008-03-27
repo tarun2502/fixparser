@@ -117,6 +117,7 @@
 
 		<mkdir dir="${dist-dir}/doc"/>
 		<copy todir="${dist-dir}/doc">
+			<fileset dir="doc" includes="**/*" />
 			<fileset dir="target/doc" includes="**/*" />
 		</copy>
 
@@ -127,6 +128,8 @@
 				<include name="${app.name}-${app.version}/**/*"/>
 			</fileset>
 		</zip>
+		
+		<echo>${dist-dir}.zip</echo>
 	</target>
 
 	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
