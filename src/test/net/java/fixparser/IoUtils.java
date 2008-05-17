@@ -31,15 +31,42 @@ public class IoUtils {
     }
 
     public static void close(InputStream inputStream) throws IOException {
-        if (null != inputStream) {
+        if (null == inputStream) {
+            return;
+        }
+
+        inputStream.close();
+    }
+
+    public static void closeSilently(InputStream inputStream) {
+        if (null == inputStream) {
+            return;
+        }
+
+        try {
             inputStream.close();
+        } catch (IOException e) {
+            // no noise
         }
     }
 
     public static void close(Reader reader) throws IOException {
-        if (null != reader) {
-            reader.close();
+        if (null == reader) {
+            return;
         }
+
+        reader.close();
     }
 
+    public static void closeSilently(Reader reader) {
+        if (null == reader) {
+            return;
+        }
+
+        try {
+            reader.close();
+        } catch (IOException e) {
+            // no noise
+        }
+    }
 }
