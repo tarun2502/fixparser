@@ -18,3 +18,6 @@
         IoUtils.close(fis);
 
 }}}
+
+= A Wroking Sample =
+[http://code.google.com/p/fixparser/source/browse/trunk/src/samples/net/java/fixparser/Sample.java]
