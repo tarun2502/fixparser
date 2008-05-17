@@ -5,6 +5,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+/**
+ * FIX Message Parser sample.
+ * 
+ * @author Leonid Shlyapnikov
+ */
 public class Sample {
 
     public static void main(String argv[]) {
@@ -59,7 +64,7 @@ public class Sample {
 
     private static File getFile(String argv[]) {
         if (1 != argv.length) {
-            throw new IllegalArgumentException("Please specify name of the FIX message file");
+            throw new IllegalArgumentException("Please specify FIX message file name");
         }
 
         final String fileName = argv[0];
