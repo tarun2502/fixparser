@@ -26,7 +26,7 @@ public class Sample {
         try {
             // initialize an input stream
             inputStream = new BufferedInputStream(new FileInputStream(file));
-            
+
             // initialize the parser
             SimpleFixParser parser = new SimpleFixParser(inputStream);
 
@@ -57,9 +57,16 @@ public class Sample {
             IoUtils.closeSilently(inputStream);
         }
 
-        System.out.println("Done. Elapsed time, milliseconds: " + elapsedTime + "; number of messages: "
-                + numOfMessages + "; milliseconds per message: " + (elapsedTime / (double) numOfMessages));
-
+        // print statistics
+        if (0 == numOfMessages) {
+            System.out.println("No FIX messages were found/parsed.");
+            System.exit(100);
+        } else {
+            System.out.println("Done.");
+            System.out.println("Elapsed time, milliseconds: " + elapsedTime);
+            System.out.println("Number of parsed FIX messages: " + numOfMessages);
+            System.out.println("Milliseconds per message: " + (elapsedTime / (double) numOfMessages));
+        }
     }
 
     private static File getFile(String argv[]) {
