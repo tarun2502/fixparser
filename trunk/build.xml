@@ -122,13 +122,19 @@
 		</copy>
 
 		<mkdir dir="${dist-dir}/samples" />
+		<copy todir="${dist-dir}/samples">
+			<fileset dir="src/samples">
+				<include name="**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
 
 		<zip destfile="${dist-dir}.zip">
 			<fileset dir="target">
 				<include name="${app.name}-${app.version}/**/*"/>
 			</fileset>
 		</zip>
-		
+
 		<echo>${dist-dir}.zip</echo>
 	</target>
 
