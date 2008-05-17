@@ -39,9 +39,8 @@ public class Sample {
                 SimpleFixMessage msg = parser.readFixMessage();
 
                 if (null == msg) {
-                    // end of the stream reached
                     elapsedTime = System.currentTimeMillis() - t0;
-                    break;
+                    break; // exit the loop, end of the stream reached
                 }
 
                 numOfMessages++;
