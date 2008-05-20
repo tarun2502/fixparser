@@ -2,21 +2,35 @@
 = Getting Started with FIX Parser =
 
 {{{
-        FileInputStream fis = new FileInputStream("fix_message.log");
-        SimpleFixParser parser = new SimpleFixParser(fis);
+        InputStream inputStream = null;
 
-        for (int indx = 0; true; indx++) {
-            SimpleFixMessage msg = parser.readFixMessage();
-            if (null == msg) {
-                break;
+        try {
+            // initialize an input stream
+            inputStream = new BufferedInputStream(new FileInputStream(file));
+
+            // initialize the parser
+            SimpleFixParser parser = new SimpleFixParser(inputStream);
+
+            // main loop
+            while (true) {
+
+                // parse a FIX Message
+                SimpleFixMessage msg = parser.readFixMessage();
+
+                if (null == msg) {
+                    break; // exit the loop, end of the stream reached
+                }
+
+                // process FIX message
+                // System.out.println(msg);
             }
-
-            // process FIX message
-
+        } catch (Exception e) {
+            // handle exception
+            e.printStackTrace();
+        } finally {
+            // close the stream if it is not null
+            IoUtils.closeSilently(inputStream);
         }
-
-        IoUtils.close(fis);
-
 }}}
 
 = A Wroking Sample =
