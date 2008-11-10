@@ -1,5 +1,7 @@
 package net.java.fixparser;
 
+import net.java.util.TagValue;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,5 +50,4 @@ public class SimpleFixMessageTest {
         SimpleFixMessage msg = new SimpleFixMessage();
         msg.put("someTag", null);
     }
-
 }

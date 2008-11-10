@@ -8,7 +8,7 @@ options {
 
 PARSER_BEGIN(SimpleFixParser)
 
-package net.java.fixparser;import net.java.fixparser.SimpleFixMessage;import net.java.fixparser.TagValueImpl;
+package net.java.fixparser;import net.java.fixparser.SimpleFixMessage;import net.java.util.TagValueImpl;
 /** * Simple FIX Message Parser.  * `net.java.fixparser.SimpleFixParser` is non-validating FIX parser.  * It allows empty tags and does not use any data dictionary to parse incoming messages. * It is implemented with the idea to parse FIX messages with maximum performance * and keep them in a form suitable for saving into database. * * @author Leonid Shlyapnikov */
 public class SimpleFixParser {
 

@@ -3,6 +3,9 @@ package net.java.fixparser;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.java.util.TagValue;
+import net.java.util.TagValueImpl;
+
 /**
  * Simple FIX Message container. Does not provide access to 
  * fields by tag name. You can access fields only iterating through {@link #fields()}.
