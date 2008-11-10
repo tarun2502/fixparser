@@ -1,4 +1,4 @@
-package net.java.fixparser;
+package net.java.util;
 
 /**
  * FIX Message Field/TagValue pair.

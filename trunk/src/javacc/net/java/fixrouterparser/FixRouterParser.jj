@@ -1,0 +1,146 @@
+/*
+ * TODO
+ *
+ * author: Leonid Shlyapnikov
+ * email: lshlyapnikov@gmail.com
+ */
+
+options {
+	STATIC = false;
+	DEBUG_PARSER = false;
+	DEBUG_LOOKAHEAD = false;
+	DEBUG_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(FixRouterParser)
+
+package net.java.fixrouterparser;
+
+import net.java.fixrouterparser.FixRouterMessage;
+import net.java.util.TagValueImpl;
+
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
+
+/**
+ * TODO
+ 
+ * @author Leonid Shlyapnikov
+ */
+public class FixRouterParser {
+	
+	private Set<String> fieldsOfInterest = null;
+	
+	public void setFieldsOfInterest(Set<String> fieldsOfInterest) {
+        if (null != fieldsOfInterest && fieldsOfInterest.size() > 0) {
+            this.fieldsOfInterest = Collections.unmodifiableSet(new HashSet<String>(fieldsOfInterest));
+        } else {
+            this.fieldsOfInterest = null;
+        }
+	}
+  	
+
+	public static void main(String args[]) throws ParseException {
+		FixRouterParser parser = new FixRouterParser(System.in);
+    	while (true) {
+    		FixRouterMessage msg = parser.readFixMessage();
+    		if (null == msg) {
+    			break;
+    		}
+    	}
+  	}
+}
+
+PARSER_END(FixRouterParser)
+
+<DEFAULT>  TOKEN : {
+	<CHECKSUM_TAG: "10" >
+|	<HEADER_TAG: "8" >	
+|	<TAG: ( ["0"-"9"] )+ >
+|	<EQ: "=" >: IN_VALUE
+|	<NEW_LINE: ( ["\r", "\n"] )+ >
+}
+
+<IN_VALUE> TOKEN : {
+	<VALUE: ( ~["\u0001", "|" ] )+ >
+|	<SOH: "\u0001" | "|" > : DEFAULT 
+}
+
+/**
+ * Reads the next FIX message from the input stream.
+ * If no message is available because the end of the stream
+ * has been reached, <code>null</code> is returned. This method
+ * blocks until input data is available, the end of the stream is detected,
+ * or an exception is thrown.
+ *
+ * @return		the next FIX message, or <code>null</code> if the end of the stream is reached.
+ * @exception	ParseException		if parse errors are encountered.
+ */
+FixRouterMessage readFixMessage() : {
+	FixRouterMessage result = null;
+}
+{
+	(
+		<EOF>
+		|
+		result = FixMessage()
+	)
+	
+	{ return result; }	
+}
+
+private FixRouterMessage FixMessage() : {
+	FixRouterMessage result = new FixRouterMessage(this.fieldsOfInterest);
+	String fixSpec;
+	TagValueImpl<String, String> tagValue;
+	String checksum;
+}
+{
+	fixSpec = Header() { result.put("8", fixSpec); }
+	
+	(
+		tagValue = TagValuePair() { result.put(tagValue); }
+	)*
+	
+	checksum = Checksum() { result.put("10", checksum); }
+	
+	[<NEW_LINE>]
+	
+	{ return result; }
+}
+
+private TagValueImpl<String, String> TagValuePair() : {
+	String tag = null;
+	String value = "";
+} 
+{
+	<TAG> { tag = token.image; }
+	"=" 
+	[ <VALUE> { value = token.image; } ]
+	<SOH>
+	{ return new TagValueImpl<String, String>(tag, value); }
+}
+
+private String Header() : {
+	String fixSpec = "";
+}
+{
+	<HEADER_TAG>
+	"="
+	[ <VALUE> { fixSpec = token.image; } ]
+	<SOH>
+	{ return  fixSpec; }
+}
+
+private String Checksum() : {
+	String checksum = "";
+}
+{
+	<CHECKSUM_TAG>
+	"=" 
+	[ <VALUE> { checksum = token.image; } ]
+	<SOH>
+	{ return checksum; }
+}
+

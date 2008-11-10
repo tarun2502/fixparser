@@ -2,7 +2,7 @@
 
 	<property file="build.properties" />
 	<property name="app.name" value="fixparser" />
-	<property name="app.version" value="0.7.2" />
+	<property name="app.version" value="0.7.3" />
 
 	<path id="base.classpath">
 		<fileset dir="lib">
@@ -24,6 +24,7 @@
 	<target name="clean" description="Delete old build and dist directories">
 		<delete dir="target" />
 		<delete dir="src/javacc/net/java/fixparser" includes="*.java" />
+		<delete dir="src/javacc/net/java/fixrouterparser" includes="*.java" />
 	</target>
 
 	<target name="compile" depends="generate" description="Compile Java sources">
@@ -55,6 +56,9 @@
 		<javacc target="src/javacc/net/java/fixparser/SimpleFixParser.jj"
 		        outputdirectory="src/javacc/net/java/fixparser"
 		        javacchome="./lib.build/javacc-4.0" />
+		<javacc target="src/javacc/net/java/fixrouterparser/FixRouterParser.jj"
+				        outputdirectory="src/javacc/net/java/fixrouterparser"
+				        javacchome="./lib.build/javacc-4.0" />
 	</target>
 
 	<target name="test" depends="compile" description="Run Unit Tests">

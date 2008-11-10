@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import net.java.util.TagValue;
+
 import org.junit.Assert;
 import org.junit.Test;
 
