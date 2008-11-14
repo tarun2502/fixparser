@@ -34,7 +34,7 @@ public class FixRouterParserTest {
 
     @Test
     public void tesShouldParseFixRouterMessage() throws Exception {
-        FixRouterParser parser = new FixRouterParser(new StringReader(FIX_MSG));
+        FixRouterParser parser = new FixRouterParser(new StringReader(replacePipe(FIX_MSG)));
         FixRouterMessage fixMessage = parser.readFixMessage();
 
         System.out.println("fixMessage: " + fixMessage);
@@ -59,7 +59,7 @@ public class FixRouterParserTest {
         final List<String> fieldsOfInterestArr = Arrays.asList("8", "9", "35", "49");
         final List<String> valueOfInterestArr = Arrays.asList("FIX.4.2", "99", "D", "SenderCompId");
 
-        FixRouterParser parser = new FixRouterParser(new StringReader(FIX_MSG));
+        FixRouterParser parser = new FixRouterParser(new StringReader(replacePipe(FIX_MSG)));
         parser.setFieldsOfInterest(new HashSet<String>(fieldsOfInterestArr));
 
         // under test
@@ -93,7 +93,7 @@ public class FixRouterParserTest {
 
     @Test
     public void testShouldReturnNullWhenReachTheEndOfTheStream() throws Exception {
-        FixRouterParser parser = new FixRouterParser(new StringReader(FIX_MSG));
+        FixRouterParser parser = new FixRouterParser(new StringReader(replacePipe(FIX_MSG)));
 
         // the stream contains only one message
         FixRouterMessage fixMessage = parser.readFixMessage();
@@ -117,7 +117,7 @@ public class FixRouterParserTest {
         final String SOME_STRANGE_MSG =
                 "8=FIX.4.2|9=99|35=N|49=SenderCompId|56=TargetCompId|115=INST|128=BROK|66=ListId_1010|82=1|83=1|431=4|429=2|68=2|73=2|11=1118420243360-25|14=999|39=1|151=0|84=0|6=100.25|11=1118420243360-26|14=1000|39=2|151=0|84=|6=100.25|10=999|";
 
-        FixRouterParser parser = new FixRouterParser(new StringReader(SOME_STRANGE_MSG));
+        FixRouterParser parser = new FixRouterParser(new StringReader(replacePipe(SOME_STRANGE_MSG)));
 
         // the stream contains only one message
         FixRouterMessage fixMessage = parser.readFixMessage();
@@ -208,5 +208,9 @@ public class FixRouterParserTest {
         result = fileContent.substring(beginIndex, endIndex);
 
         return result;
+    }
+
+    private static String replacePipe(String str) {
+        return str.replaceAll("\\|", "\u0001");
     }
 }

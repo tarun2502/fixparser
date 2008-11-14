@@ -63,8 +63,8 @@ PARSER_END(FixRouterParser)
 }
 
 <IN_VALUE> TOKEN : {
-	<VALUE: ( ~["\u0001", "|" ] )+ >
-|	<SOH: "\u0001" | "|" > : DEFAULT 
+	<VALUE: ( ~["\u0001"] )+ >
+|	<SOH: "\u0001" > : DEFAULT
 }
 
 /**
