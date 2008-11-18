@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -77,7 +78,7 @@ public class FixRouterParserTest {
             final String expectedTag = EXPECTED_FIELDS[indx];
             final String expectedValue = EXPECTED_VALUES[indx];
             TagValue<String, String> field = fixMessage.field(indx);
-            
+
             Assert.assertEquals(expectedTag, field.tag());
             Assert.assertEquals(expectedValue, field.value());
         }
@@ -130,8 +131,8 @@ public class FixRouterParserTest {
     @Test
     public void testParseSampleLogFile() throws Exception {
         // nothing special just try to parse out a log file
-        FileInputStream fis = new FileInputStream(SAMPLE_LOG_FILE);
-        FixRouterParser parser = new FixRouterParser(fis);
+        InputStream inputStream = new NewLineRemoverInputStream(new FileInputStream(SAMPLE_LOG_FILE));
+        FixRouterParser parser = new FixRouterParser(inputStream);
 
         for (int indx = 0; true; indx++) {
             System.out.println("reading message number: " + (indx + 1));
@@ -141,7 +142,7 @@ public class FixRouterParserTest {
             }
         }
 
-        IoUtils.close(fis);
+        IoUtils.close(inputStream);
     }
 
     @Test
@@ -212,5 +213,24 @@ public class FixRouterParserTest {
 
     private static String replacePipe(String str) {
         return str.replaceAll("\\|", "\u0001");
+    }
+
+    private static class NewLineRemoverInputStream extends InputStream {
+
+        private final InputStream inputSteam;
+
+        private NewLineRemoverInputStream(InputStream inputStream) {
+            this.inputSteam = inputStream;
+        }
+
+        @Override
+        public int read() throws IOException {
+            while (true) {
+                int result = inputSteam.read();
+                if ('\n' != result && '\r' != result) {
+                    return result;
+                }
+            }
+        }
     }
 }

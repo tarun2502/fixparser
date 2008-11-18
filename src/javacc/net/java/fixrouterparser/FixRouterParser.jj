@@ -59,7 +59,6 @@ PARSER_END(FixRouterParser)
 |	<HEADER_TAG: "8" >	
 |	<TAG: ( ["0"-"9"] )+ >
 |	<EQ: "=" >: IN_VALUE
-|	<NEW_LINE: ( ["\r", "\n"] )+ >
 }
 
 <IN_VALUE> TOKEN : {
@@ -104,8 +103,6 @@ private FixRouterMessage FixMessage() : {
 	)*
 	
 	checksum = Checksum() { result.put("10", checksum); }
-	
-	[<NEW_LINE>]
 	
 	{ return result; }
 }
