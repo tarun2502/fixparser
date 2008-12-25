@@ -11,10 +11,10 @@ performance and keep them in a form suitable for saving into database.
     JDK 1.5.x
 
 *Build Requirements:*
-    JDK 1.5.x, Apache Ant 1.7.x.
+    JDK 1.5.x, Apache Maven 2.0.x.
     
 *JavaCC Grammar:*
-	fixparser-x.x.x/src/javacc/net/java/fixparser/SimpleFixParser.jj     
+	fixparser-x.x.x/src/main/javacc/net/java/fixparser/SimpleFixParser.jj     
 
 Building Instructions and Getting Started Wiki Pages can be found at
 http://code.google.com/p/fixparser/w/list.
