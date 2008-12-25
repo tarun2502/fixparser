@@ -3,7 +3,7 @@
 
 = Building Instructions =
 
-*Requirements:* JDK 1.5.x and Apache Ant 1.7.x.
+*Requirements:* JDK 1.5.x and Apache Maven 2.0.x.
 
 1. Check Out the Source Tree
 {{{
@@ -16,7 +16,7 @@
 > cd fixparser
 }}}
 
-3. Build with Ant
+3. Build with Maven
 {{{
-> ant dist
+> mvn package
 }}}
