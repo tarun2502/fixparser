@@ -5,25 +5,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.java.util.TagValue;
+public class FixMessage {
 
-public class CompositeTagValue {
-
-    private List<TagValue<String, String>> tagList;
+    private List<Field> tagList;
 
     private Map<String, Integer> tagIndexMap;
 
-    public CompositeTagValue() {
-        this.tagList = new ArrayList<TagValue<String, String>>();
+    public FixMessage() {
+        this.tagList = new ArrayList<Field>();
         this.tagIndexMap = new HashMap<String, Integer>();
     }
 
-    public CompositeTagValue(int capacity) {
-        this.tagList = new ArrayList<TagValue<String, String>>(capacity);
+    public FixMessage(int capacity) {
+        this.tagList = new ArrayList<Field>(capacity);
         this.tagIndexMap = new HashMap<String, Integer>(capacity);
     }
 
-    public TagValue<String, String> get(String tagId) {
+    public Field get(String tagId) {
         Integer index = tagIndexMap.get(tagId);
         if (null == index) {
             return null;
@@ -32,10 +30,10 @@ public class CompositeTagValue {
         return tagList.get(index.intValue());
     }
 
-    public TagValue<String, String> put(TagValue<String, String> newField) {
+    public Field put(Field newField) {
         Integer index = tagIndexMap.get(newField.tag());
 
-        TagValue<String, String> result = null;
+        Field result = null;
 
         if (index != null) {
             // update existing field
@@ -50,11 +48,11 @@ public class CompositeTagValue {
         return result;
     }
 
-    public TagValue<String, String> get(int index) {
+    public Field get(int index) {
         return tagList.get(index);
     }
 
-    public TagValue<String, String> set(int index, TagValue<String, String> newField) {
+    public Field set(int index, Field newField) {
         Integer existingIndex = tagIndexMap.get(newField.tag());
 
         if (null != existingIndex && existingIndex.intValue() != index) {
@@ -63,31 +61,21 @@ public class CompositeTagValue {
                     + ", you tried to set it with index: " + index);
         }
 
-        TagValue<String, String> result = tagList.set(index, newField);
+        Field result = tagList.set(index, newField);
         assert tagIndexMap.size() == tagList.size();
 
         return result;
     }
 
-    private void addNew(TagValue<String, String> newField) {
+    private void addNew(Field newField) {
         Integer oldIndx = tagIndexMap.put(newField.tag(), tagList.size()); // put new index
         assert null == oldIndx;
-        
-        //        if (null != oldIndx) {
-        //            // rollback the change
-        //            tagIndexMap.put(newField.tag(), oldIndx);
-        //            // throw
-        //            throw new IllegalArgumentException("Cannot add a field. Field: " + newField.tag()
-        //                    + " already added to the container");
-        //        }
-
         tagList.add(newField);
-
         assert tagIndexMap.size() == tagList.size();
     }
 
-    public TagValue<String, String> remove(int index) {
-        TagValue<String, String> result = tagList.remove(index);
+    public Field remove(int index) {
+        Field result = tagList.remove(index);
         if (null == result) {
             return null;
         }
@@ -96,12 +84,12 @@ public class CompositeTagValue {
         return result;
     }
 
-    public TagValue<String, String> remove(String tagId) {
+    public Field remove(String tagId) {
         Integer index = tagIndexMap.remove(tagId);
         if (null == index) {
             return null;
         }
-        TagValue<String, String> result = tagList.remove(index.intValue());
+        Field result = tagList.remove(index.intValue());
         assert tagIndexMap.size() == tagList.size();
         return result;
     }
@@ -110,4 +98,16 @@ public class CompositeTagValue {
         assert tagIndexMap.size() == tagList.size();
         return tagList.size();
     }
+    
+    public boolean hasRepeatingGroup() {
+        return false; //XXX
+    }
+    
+    public RepeatingGroup getRepeatingGroup(String tagId) {
+       return (RepeatingGroup) get(tagId);
+    }
+    
+    public RepeatingGroup getRepeatingGroup(int index) {
+        return (RepeatingGroup) get(index);
+    }    
 }
