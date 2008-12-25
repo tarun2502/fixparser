@@ -1,25 +1,22 @@
 package net.java.fixparser;
 
-import net.java.util.TagValue;
-import net.java.util.TagValueImpl;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CompositeTagValueTest {
+public class FixMessageTest {
 
-    private CompositeTagValue message;
+    private FixMessage message;
 
     @Before
     public void before() {
-        message = new CompositeTagValue();
+        message = new FixMessage();
     }
 
     @Test
     public void testPutAndGet() {
         // GIVEN
-        final TagValue<String, String> expectedField = createField("11", "Value");
+        final Field expectedField = createField("11", "Value");
 
         // WHEN
         Assert.assertEquals(0, message.size());
@@ -36,7 +33,7 @@ public class CompositeTagValueTest {
         // GIVEN
         final String tag = "11";
         final String value = "Value";
-        final TagValue<String, String> expectedField = createField(tag, value);
+        final Field expectedField = createField(tag, value);
         message.put(expectedField);
         Assert.assertEquals(1, message.size());
 
@@ -63,7 +60,7 @@ public class CompositeTagValueTest {
         Assert.assertEquals(3, message.size());
 
         // WHEN
-        final TagValue<String, String> oldField = message.put(createField(tag, "_NEW_" + value));
+        final Field oldField = message.put(createField(tag, "_NEW_" + value));
 
         // THEN
         Assert.assertEquals(3, message.size());
@@ -113,8 +110,8 @@ public class CompositeTagValueTest {
     public void testPutPutAndGet() {
         // GIVEN
         
-        final TagValue<String, String> initialField = createField("11", "Value");
-        final TagValue<String, String> expectedField = createField("11", "NewTestValue");
+        final Field initialField = createField("11", "Value");
+        final Field expectedField = createField("11", "NewTestValue");
         
         message.put(initialField);
         Assert.assertEquals(1, message.size());
@@ -132,8 +129,8 @@ public class CompositeTagValueTest {
     public void testPutThenSet() {
         // GIVEN
         
-        final TagValue<String, String> initialField = createField("11", "TestValue");
-        final TagValue<String, String> expectedField = createField("11", "NewTestValue");
+        final Field initialField = createField("11", "TestValue");
+        final Field expectedField = createField("11", "NewTestValue");
         
         message.put(initialField);
         Assert.assertEquals(1, message.size());
@@ -151,12 +148,12 @@ public class CompositeTagValueTest {
     @Test
     public void testRemoveByTag() {
         // GIVEN
-        final TagValue<String, String> toBeRemovedField = createField("11", "TestValue");
+        final Field toBeRemovedField = createField("11", "TestValue");
         message.put(toBeRemovedField);
         Assert.assertEquals(1, message.size());
 
         // WHEN
-        final TagValue<String, String> removedField = message.remove(toBeRemovedField.tag());
+        final Field removedField = message.remove(toBeRemovedField.tag());
 
         // THEN
         Assert.assertEquals(0, message.size());
@@ -167,9 +164,9 @@ public class CompositeTagValueTest {
     public void testRemoveByTag2() {
         // GIVEN
         
-        final TagValue<String, String> expectedField0 = createField("11", "Value11");
-        final TagValue<String, String> toBeRemoved = createField("12", "Value12");
-        final TagValue<String, String> expectedField1 = createField("13", "Value13");
+        final Field expectedField0 = createField("11", "Value11");
+        final Field toBeRemoved = createField("12", "Value12");
+        final Field expectedField1 = createField("13", "Value13");
 
         message.put(expectedField0);
         message.put(toBeRemoved);
@@ -178,7 +175,7 @@ public class CompositeTagValueTest {
         Assert.assertEquals(3, message.size());
 
         // WHEN
-        final TagValue<String, String> removedField  = message.remove(toBeRemoved.tag());
+        final Field removedField  = message.remove(toBeRemoved.tag());
 
         // THEN
         Assert.assertEquals(2, message.size());
@@ -190,12 +187,12 @@ public class CompositeTagValueTest {
     @Test
     public void testRemoveByTag3() {
         // GIVEN
-        final TagValue<String, String> field = createField("11", "TestValue");
+        final Field field = createField("11", "TestValue");
         message.put(field);
         Assert.assertEquals(1, message.size());
 
         // WHEN
-        final TagValue<String, String> mustBeNull = message.remove("666");
+        final Field mustBeNull = message.remove("666");
 
         // THEN
         Assert.assertEquals(1, message.size());
@@ -206,12 +203,12 @@ public class CompositeTagValueTest {
     @Test
     public void testRemoveByIndex() {
         // GIVEN
-        final TagValue<String, String> toBeRemoved = createField("11", "TestValue");
+        final Field toBeRemoved = createField("11", "TestValue");
         message.put(toBeRemoved);
         Assert.assertEquals(1, message.size());
 
         // WHEN
-        final TagValue<String, String> removedField = message.remove(0);
+        final Field removedField = message.remove(0);
 
         // THEN
         Assert.assertEquals(0, message.size());
@@ -222,9 +219,9 @@ public class CompositeTagValueTest {
     public void testRemoveByIndex2() {
         // GIVEN
         
-        final TagValue<String, String> expectedField0 = createField("11", "Value11");
-        final TagValue<String, String> toBeRemoved = createField("12", "Value12");
-        final TagValue<String, String> expectedField1 = createField("13", "Value13");
+        final Field expectedField0 = createField("11", "Value11");
+        final Field toBeRemoved = createField("12", "Value12");
+        final Field expectedField1 = createField("13", "Value13");
 
         message.put(expectedField0);
         message.put(toBeRemoved);
@@ -233,7 +230,7 @@ public class CompositeTagValueTest {
         Assert.assertEquals(3, message.size());        
 
         // WHEN
-        final TagValue<String, String> removedField = message.remove(1);
+        final Field removedField = message.remove(1);
 
         // THEN
         Assert.assertEquals(2, message.size());
@@ -245,7 +242,7 @@ public class CompositeTagValueTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveByIndex3() {
         // GIVEN
-        final TagValue<String, String> field = createField("11", "TestValue");
+        final Field field = createField("11", "TestValue");
         message.put(field);
         Assert.assertEquals(1, message.size());
 
@@ -256,8 +253,8 @@ public class CompositeTagValueTest {
         Assert.fail("Expected IndexOutOfBoundsException");
     }
 
-    private static TagValueImpl<String, String> createField(String tag, String value) {
-        return new TagValueImpl<String, String>(tag, value);
+    private static Field createField(String tag, String value) {
+        return new FieldImpl(tag, value);
     }
 
 }
