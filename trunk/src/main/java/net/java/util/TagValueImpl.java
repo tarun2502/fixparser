@@ -1,10 +1,13 @@
 package net.java.util;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * FIX Field TagValue pair implementation.
  * 
  * @author Leonid Shlyapnikov
  */
+@Immutable
 public class TagValueImpl<T, V> implements TagValue<T, V> {
 
     private final T tag;
@@ -46,9 +49,10 @@ public class TagValueImpl<T, V> implements TagValue<T, V> {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        TagValueImpl other = (TagValueImpl) obj;
+        TagValueImpl<T, V> other = (TagValueImpl<T, V>) obj;
         if (!tag.equals(other.tag))
             return false;
         if (!value.equals(other.value))

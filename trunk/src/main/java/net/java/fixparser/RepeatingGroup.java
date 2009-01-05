@@ -46,4 +46,8 @@ public class RepeatingGroup implements Field {
     public boolean isRepeatingGroup() {
         return true;
     }
+    
+    public RepeatingGroup toRepeatingGroup() {
+        return this;
+    }
 }

@@ -2,7 +2,9 @@ package net.java.fixparser;
 
 import net.java.util.TagValue;
 import net.java.util.TagValueImpl;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public class FieldImpl implements Field {
 
     private final TagValue<String, String> tagValue;
@@ -24,7 +26,11 @@ public class FieldImpl implements Field {
     public boolean isRepeatingGroup() {
         return false;
     }
-
+    
+    public RepeatingGroup toRepeatingGroup() {
+        throw new UnsupportedOperationException("Cannot cast Field to RepeatingGroup");
+    }
+    
     public String tag() {
         return tagValue.tag();
     }
