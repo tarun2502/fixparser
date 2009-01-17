@@ -78,7 +78,8 @@ public class FieldContainerImpl implements FieldContainer {
     }
 
     // TODO this method needs more unit testing:
-    // TODO different scenarios: update a field specifying a new index, update an index specifying a new field, etc all possible choices
+    // TODO different scenarios: update a field specifying a new index, update an index specifying a new field, -- done
+    // TODO the same as above, but for repeating groups
     /* (non-Javadoc)
      * @see net.java.fixparser.FieldContainer#set(int, net.java.fixparser.Field)
      */
@@ -92,8 +93,8 @@ public class FieldContainerImpl implements FieldContainer {
             // rollback the change
             fieldIndexMap.put(newField.tag(), existingIndex);
             throw new IllegalArgumentException("Cannot set a field. Field: " + newField.tag()
-                    + " already set on the container with existingIndex: " + existingIndex
-                    + ", you tried to set it with newIndex: " + newIndex);
+                    + " already set on the container with index: " + existingIndex
+                    + ", you tried to set it with index: " + newIndex);
         }
 
         // 2. if repeating group then put the index into repeatingGroupIndexMap
@@ -107,6 +108,13 @@ public class FieldContainerImpl implements FieldContainer {
         // 4. if removedField.tag is not newField.tag, remove it from repeatingGroupIndexMap
         if (removedField.isRepeatingGroup() && !removedField.tag().equals(newField.tag())) {
             repeatingGroupIndexMap.remove(removedField.tag());
+        }
+        
+        // 5. if newField.tag() does not equal to removedField.tag(), clean up fieldIndexMap
+        if (fieldIndexMap.size() > fieldList.size()) {
+            assert !removedField.tag().equals(newField.tag());
+            final Integer oldIndex = fieldIndexMap.remove(removedField.tag());
+            assert oldIndex.intValue() == index;
         }
 
         assert fieldIndexMap.size() == fieldList.size();

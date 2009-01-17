@@ -61,5 +61,9 @@ public class FieldImpl implements Field {
 
         return true;
     }
+    
+    public String toString() {
+        return tagValue.toString();
+    }
 
 }

@@ -6,7 +6,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
+// TODO get rid of FixMessageTest
 public class FieldContainerImplTest {
     
     private FieldContainer message;
@@ -108,8 +110,28 @@ public class FieldContainerImplTest {
         message.set(0, createField(tag, value)); // MUST BE 1
         
         // THEN
-        Assert.fail("IllegalArgumentException is expected");
+        fail("IllegalArgumentException is expected");
     }
+    
+    @Test
+    public void testShouldSetNewFieldAtExistingIndex() {
+        // GIVEN
+        final String tag = "11";
+        final String value = "Value11";
+        message.put(createField("10", "value10"));
+        message.put(createField(tag, value));
+        message.put(createField("12", "value12"));
+        assertEquals(3, message.numberOfFields());
+        
+        // WHEN
+        final Field removedField = message.set(1, createField(tag + "-NEW", value + "-NEW"));
+        
+        // THEN
+        assertEquals(tag, removedField.tag());
+        assertEquals(value, removedField.value());
+        assertEquals(tag + "-NEW", message.get(1).tag());
+        assertEquals(value + "-NEW", message.get(1).value());        
+    }    
 
     @Test
     public void testPutPutAndGet() {
@@ -257,7 +279,7 @@ public class FieldContainerImplTest {
         // THEN
         Assert.fail("Expected IndexOutOfBoundsException");
     }
-
+    
     private static Field createField(String tag, String value) {
         return new FieldImpl(tag, value);
     }
