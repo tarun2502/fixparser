@@ -36,7 +36,21 @@ public class FieldContainerImpl implements FieldContainer {
         this.fieldIndexMap = new HashMap<String, Integer>(capacity);
         this.repeatingGroupIndexMap = new HashMap<String, Integer>(2);
     }
-
+    
+    public FieldContainerImpl(Field... fields) {
+        this(fields.length);
+        for (Field f: fields) {
+            this.put(f);
+        }
+    }
+    
+    public FieldContainerImpl(List<Field> fields) {
+        this(fields.size());
+        for (Field f: fields) {
+            this.put(f);
+        }
+    }
+    
     /* (non-Javadoc)
      * @see net.java.fixparser.FieldContainer#get(java.lang.String)
      */
