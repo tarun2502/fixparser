@@ -1,18 +1,16 @@
 package net.java.fixparser;
 
-import java.util.Arrays;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static java.util.Arrays.asList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static java.util.Arrays.asList;
 
-// TODO get rid of FixMessageTest
 public class FieldContainerImplTest {
 
     private FieldContainer message;
