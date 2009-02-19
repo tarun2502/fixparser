@@ -90,6 +90,7 @@ public class FieldContainerImplTest {
         Field removed2 = message.put(field("ggg", "ggg-value-updated"));
 
         // THEN
+        assertEquals(5, message.numberOfFields());
         assertEquals("ggg", removed2.tag());
         assertEquals("ggg-value", removed2.value());
         int indx = 0;
