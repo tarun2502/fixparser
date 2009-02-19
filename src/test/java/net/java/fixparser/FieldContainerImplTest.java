@@ -1,5 +1,7 @@
 package net.java.fixparser;
 
+import java.util.Arrays;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static java.util.Arrays.asList;
 
 // TODO get rid of FixMessageTest
 public class FieldContainerImplTest {
@@ -76,27 +79,28 @@ public class FieldContainerImplTest {
     @Test
     public void testUpdateKeepsPosition() {
         // GIVEN
-        message.put(field("0", "value0"));
-        message.put(field("1", "value1"));
-        message.put(field("2", "value2"));
-        message.put(field("3", "value3"));
-        message.put(field("4", "value4"));
+        message.put(field("zzz", "zzz-value"));
+        message.put(field("xxx", "xxx-value"));
+        message.put(field("ggg", "ggg-value"));
+        message.put(field("aaa", "aaa-value"));
+        message.put(field("bbb", "bbb-value"));
         assertEquals(5, message.numberOfFields());
 
         // WHEN
-        Field removed2 = message.put(field("2", "value2-updated"));
+        Field removed2 = message.put(field("ggg", "ggg-value-updated"));
 
         // THEN
-        assertEquals("2", removed2.tag());
-        assertEquals("value2", removed2.value());   
-        for (int indx = 0; indx <= 4; indx++) {
-            String expectedTag = String.valueOf(indx);
-            String expectedValue = "value" + indx;
-            if (2 == indx) {
+        assertEquals("ggg", removed2.tag());
+        assertEquals("ggg-value", removed2.value());
+        int indx = 0;
+        for (String expectedTag: asList("zzz", "xxx", "ggg", "aaa", "bbb")) {
+            String expectedValue = expectedTag + "-value";
+            if ("ggg".equals(expectedTag)) {
                 expectedValue += "-updated";
             }
             assertEquals(expectedTag, message.get(indx).tag());
-            assertEquals(expectedValue, message.get(indx).value());            
+            assertEquals(expectedValue, message.get(indx).value());
+            indx++;
         }
     }
 
