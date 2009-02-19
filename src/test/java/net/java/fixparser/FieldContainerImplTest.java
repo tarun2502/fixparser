@@ -11,9 +11,9 @@ import static org.junit.Assert.fail;
 
 // TODO get rid of FixMessageTest
 public class FieldContainerImplTest {
-    
+
     private FieldContainer message;
-    
+
     @Before
     public void before() {
         message = new FieldContainerImpl();
@@ -35,12 +35,13 @@ public class FieldContainerImplTest {
         assertEquals(expectedField, message.get(expectedField.tag()));
         assertEquals(expectedField, message.get(0));
     }
-    
+
     @Test
     public void testPutAndGetForRepeatingGroup() {
         // GIVEN
-        final RepeatingGroup expectedField = new RepeatingGroup(field("NoField", "NoValue"), 
-                new RepeatingInstance(field("ri01", "ri01V"), field("ri02", "ri02V"), field("ri03", "ri03V")));
+        final RepeatingGroup expectedField =
+                new RepeatingGroup(field("NoField", "NoValue"), new RepeatingInstance(field("ri01", "ri01V"), field(
+                        "ri02", "ri02V"), field("ri03", "ri03V")));
 
         // WHEN
         assertEquals(0, message.numberOfFields());
@@ -71,18 +72,45 @@ public class FieldContainerImplTest {
         assertEquals(tag, message.get(0).tag());
         assertEquals(value, message.get(0).value());
     }
-    
+
+    @Test
+    public void testUpdateKeepsPosition() {
+        // GIVEN
+        message.put(field("0", "value0"));
+        message.put(field("1", "value1"));
+        message.put(field("2", "value2"));
+        message.put(field("3", "value3"));
+        message.put(field("4", "value4"));
+        assertEquals(5, message.numberOfFields());
+
+        // WHEN
+        Field removed2 = message.put(field("2", "value2-updated"));
+
+        // THEN
+        assertEquals("2", removed2.tag());
+        assertEquals("value2", removed2.value());   
+        for (int indx = 0; indx <= 4; indx++) {
+            String expectedTag = String.valueOf(indx);
+            String expectedValue = "value" + indx;
+            if (2 == indx) {
+                expectedValue += "-updated";
+            }
+            assertEquals(expectedTag, message.get(indx).tag());
+            assertEquals(expectedValue, message.get(indx).value());            
+        }
+    }
+
     @Test
     public void testPutPut() {
         // GIVEN
-        
+
         final String tag = "11";
         final String value = "Value11";
-        
+
         message.put(field("10", "value10"));
         message.put(field(tag, value));
         message.put(field("12", "value12"));
-        
+
         assertEquals(3, message.numberOfFields());
 
         // WHEN
@@ -127,11 +155,11 @@ public class FieldContainerImplTest {
 
         // WHEN
         message.set(0, field(tag, value)); // MUST BE 1
-        
+
         // THEN
         fail("IllegalArgumentException is expected");
     }
-    
+
     @Test
     public void testShouldSetNewFieldAtExistingIndex() {
         // GIVEN
@@ -141,24 +169,24 @@ public class FieldContainerImplTest {
         message.put(field(tag, value));
         message.put(field("12", "value12"));
         assertEquals(3, message.numberOfFields());
-        
+
         // WHEN
         final Field removedField = message.set(1, field(tag + "-NEW", value + "-NEW"));
-        
+
         // THEN
         assertEquals(tag, removedField.tag());
         assertEquals(value, removedField.value());
         assertEquals(tag + "-NEW", message.get(1).tag());
-        assertEquals(value + "-NEW", message.get(1).value());        
-    }    
+        assertEquals(value + "-NEW", message.get(1).value());
+    }
 
     @Test
     public void testPutPutAndGet() {
         // GIVEN
-        
+
         final Field initialField = field("11", "Value");
         final Field expectedField = field("11", "NewTestValue");
-        
+
         message.put(initialField);
         assertEquals(1, message.numberOfFields());
 
@@ -174,10 +202,10 @@ public class FieldContainerImplTest {
     @Test
     public void testPutThenSet() {
         // GIVEN
-        
+
         final Field initialField = field("11", "TestValue");
         final Field expectedField = field("11", "NewTestValue");
-        
+
         message.put(initialField);
         assertEquals(1, message.numberOfFields());
 
@@ -203,13 +231,13 @@ public class FieldContainerImplTest {
 
         // THEN
         assertEquals(0, message.numberOfFields());
-        assertEquals(toBeRemovedField, removedField);        
+        assertEquals(toBeRemovedField, removedField);
     }
 
     @Test
     public void testRemoveByTag2() {
         // GIVEN
-        
+
         final Field expectedField0 = field("11", "Value11");
         final Field toBeRemoved = field("12", "Value12");
         final Field expectedField1 = field("13", "Value13");
@@ -217,19 +245,19 @@ public class FieldContainerImplTest {
         message.put(expectedField0);
         message.put(toBeRemoved);
         message.put(expectedField1);
-        
+
         assertEquals(3, message.numberOfFields());
 
         // WHEN
-        final Field removedField  = message.remove(toBeRemoved.tag());
+        final Field removedField = message.remove(toBeRemoved.tag());
 
         // THEN
         assertEquals(2, message.numberOfFields());
         assertEquals(expectedField0, message.get(0));
         assertEquals(expectedField1, message.get(1));
-        assertEquals(toBeRemoved, removedField);        
+        assertEquals(toBeRemoved, removedField);
     }
-    
+
     @Test
     public void testRemoveByTag3() {
         // GIVEN
@@ -264,7 +292,7 @@ public class FieldContainerImplTest {
     @Test
     public void testRemoveByIndex2() {
         // GIVEN
-        
+
         final Field expectedField0 = field("11", "Value11");
         final Field toBeRemoved = field("12", "Value12");
         final Field expectedField1 = field("13", "Value13");
@@ -272,8 +300,8 @@ public class FieldContainerImplTest {
         message.put(expectedField0);
         message.put(toBeRemoved);
         message.put(expectedField1);
-        
-        assertEquals(3, message.numberOfFields());        
+
+        assertEquals(3, message.numberOfFields());
 
         // WHEN
         final Field removedField = message.remove(1);
@@ -284,7 +312,7 @@ public class FieldContainerImplTest {
         assertEquals(expectedField1, message.get(1));
         assertEquals(toBeRemoved, removedField);
     }
-    
+
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveByIndex3() {
         // GIVEN
@@ -298,7 +326,7 @@ public class FieldContainerImplTest {
         // THEN
         Assert.fail("Expected IndexOutOfBoundsException");
     }
-    
+
     private static Field field(String tag, String value) {
         return new FieldImpl(tag, value);
     }
