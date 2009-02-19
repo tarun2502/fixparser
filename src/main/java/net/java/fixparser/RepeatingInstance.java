@@ -1,16 +1,23 @@
 package net.java.fixparser;
 
+import java.util.List;
 
-public class RepeatingInstance {
 
-    public Field get(String tagId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    public Field get(int fieldIndex) {
-        // TODO Auto-generated method stub
-        return null;
+public class RepeatingInstance extends FieldContainerImpl {
+
+    public RepeatingInstance() {
+        super();
     }
 
+    public RepeatingInstance(Field... fields) {
+        super(fields);
+    }
+
+    public RepeatingInstance(int capacity) {
+        super(capacity);
+    }
+
+    public RepeatingInstance(List<Field> fields) {
+        super(fields);
+    }
 }
