@@ -1,4 +1,4 @@
-package net.java.fixparser;
+package net.java.util;
 
 import java.io.IOException;
 import java.io.InputStream;
