@@ -1,9 +1,13 @@
-package net.java.fixparser;
+package net.java.fixparser.samples;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+
+import net.java.fixparser.SimpleFixMessage;
+import net.java.fixparser.SimpleFixParser;
+import net.java.util.IoUtils;
 
 /**
  * FIX Message Parser sample.

@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import net.java.fixparser.IoUtils;
+import net.java.util.IoUtils;
 import net.java.util.TagValue;
 
 import org.junit.Assert;

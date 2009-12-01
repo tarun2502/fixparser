@@ -1,11 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	<properties>
+        <fixparser.version>0.7.3</fixparser.version>
+    </properties>
+    
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.java.fixparser</groupId>
 	<artifactId>fixparser</artifactId>
 	<packaging>jar</packaging>
-	<version>0.7.3</version>
 	<name>fixparser</name>
+	<version>${fixparser.version}</version>
 	<url>http://fixparser.googlecode.com</url>
 
 	<pluginRepositories>
@@ -21,8 +26,18 @@
 			<layout>legacy</layout>
 		</pluginRepository>
 	</pluginRepositories>
+	<developers>
+		<developer>
+			<name>Leonid Shlyapnikov</name>
+			<email>lshlyapnikov@gmail.com</email>
+		</developer>
+	</developers>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+			</plugins>
+		</pluginManagement>
 		<!--<plugin>-->
 		<!--<groupId>org.codehaus.mojo<groupId>-->
 		<!--<artifactId>findbugs-maven-plugin<artifactId>-->
@@ -60,6 +75,9 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
