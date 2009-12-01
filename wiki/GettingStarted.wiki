@@ -34,4 +34,4 @@
 }}}
 
 = A Wroking Sample =
-[http://code.google.com/p/fixparser/source/browse/trunk/src/samples/net/java/fixparser/Sample.java]
+[http://fixparser.googlecode.com/svn/trunk/src/main/java/net/java/fixparser/samples/Sample.java]
